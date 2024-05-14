@@ -88,5 +88,61 @@ while True:
                     if not hjol:
                         hjol = True
                     break
+
+
+from machine import Pin
+from time import sleep
+from random import choice
+
+# Pin stillingar
+player1_led_pins = [1, 13, 11, 9, 8, 17]
+player1_button_pins = [2, 14, 12, 10, 3, 18]
+player2_led_pins = [21, 48, 36, 38, 40, 42]
+player2_button_pins = [20, 47, 35, 37, 39, 41]
+bulb_pins = [4, 5, 6, 7, 15, 16]
+
+# Upphafsstilli LED og hnappa pinnana fyrir báða leikmenn
+player1_leds = [Pin(pin, Pin.OUT) for pin in player1_led_pins]
+player1_buttons = [Pin(pin, Pin.IN, Pin.PULL_UP) for pin in player1_button_pins]
+player2_leds = [Pin(pin, Pin.OUT) for pin in player2_led_pins]
+player2_buttons = [Pin(pin, Pin.IN, Pin.PULL_UP) for pin in player2_button_pins]
+bulbs = [Pin(pin, Pin.OUT) for pin in bulb_pins]
+
+def player_turn(player_leds, player_buttons):
+    # Bíð eftir að leikmaður velji hnapp
+    while True:
+        for i, button in enumerate(player_buttons):
+            if not button.value():  # Hnappurinn er ýttur niður
+                return i  # Skila innsláttarstöðu hnappsins sem ýtt var á
+
+def light_random_bulb(bulb_pins):
+    # Veldu einn handlega ljóspúða til að kveikja á
+    bulb_to_light = choice(bulb_pins)
+    # Kveikja á valda ljóspúða
+    for bulb_pin in bulb_pins:
+        bulb_pin.value(0)  # Slökkva á öllum ljóspúðum
+    bulb_pins[bulb_to_light].value(1)  # Kveikja á valda ljóspúðanum
+    return bulb_to_light
+
+def main():
+    # Lykkja fyrir aðal leik
+    while True:
+        # Leikmaður 1 sinnar umferð
+        player1_choice = player_turn(player1_leds, player1_buttons)
+        
+        lit_bulb = light_random_bulb(bulbs)
+        
+
+        # Leikmaður 2 sinnar umferð
+        player2_choice = player_turn(player2_leds, player2_buttons)
+        
+        lit_bulb = light_random_bulb(bulbs)
     
+
+if __name__ == "__main__":
+    main()
+
+
+
+
 
