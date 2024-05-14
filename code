@@ -1,0 +1,92 @@
+from machine import Pin, PWM
+from time import ticks_ms
+from random import randint
+
+led_pin1 = [1, 13, 11, 9, 8, 17]
+taki_pin1 = [2, 14, 12, 10, 3, 18]
+led_pin2 = [21, 48, 36, 38, 40, 42]
+taki_pin2 = [20, 47, 35, 37, 39, 41]
+
+vel_led = [4, 5, 6, 7, 15, 16]
+vel_led = [Pin(x, Pin.OUT) for x in vel_led]
+
+#lif_led1 = [x, x, x]
+#lif_led2 = [x, x, x]
+
+led_man1 = [Pin(pin, Pin.OUT, Pin.PULL_UP)for pin in led_pin1]
+taki_man1 = [Pin(pin, Pin.OUT)for pin in taki_pin1]
+
+led_man2 = [Pin(pin, Pin.OUT, Pin.PULL_UP)for pin in led_pin2]
+taki_man2 = [Pin(pin, Pin.OUT)for pin in taki_pin2]
+
+for _ in range(3):
+    for led in led_man1:
+        led.value(1)
+    for led in led_man2:
+        led.value(1)
+    
+man1_lif = 3
+man2_lif = 3
+spilari = 1
+hjol = True
+
+while True:
+    if man1_lif == 0:
+        print("maneskja 1 tapaði")
+        break
+    elif man2_lif == 0:
+        print("maneskja 2 tapaði")
+        break
+    if man1_lif == 3 and man2_lif == 3 and hjol:
+        hjol = False
+    
+    if spilari ==1:
+        num_man1 = randint(1, 6)
+        for led in led_man1:
+            led.value(1)
+        for taki in taki_man1:
+            #button.value() = 0
+            for led in led_man1:
+                led.value(0)
+            rand_num_vel= randint(1, 6)
+            if hjol == False:
+                rand_num_vel2 = randint(1, 6)
+                while rand_num_vel2 == rand_num_vel:
+                    rand_num_vel2 = randint(1, 6)
+                    for led in vel_led:
+                        led.value(1)
+            if num_man1 == rand_num_vel and num_man1 == rand_num_vel2:
+                man1_lif -=1
+                for led in vel_led:
+                    led.value(0)
+                for i in range(lif_led1):
+                    leds.man1[i].value(0)
+                    if not hjol:
+                        hjol = True
+                break
+    else:
+        num_man2 = randint(1, 6)
+        for led in led_man2:
+            led.value(1)
+        for taki in taki_man2:
+            #button.value() = 0
+            for led in led_man2:
+                led.value(0)
+            rand_num_vel = randint(1,6)
+            if hjol == False:
+                rand_num_vel2 = randint(1, 6)
+                while rand_num_vel2 == rand_num_vel:
+                    rand_num_vel2 = randint(1, 6)
+                for led in vel_led:
+                    led.value(1)
+            if num_man2 == rand_num_vel and num_man2 == rand_num_vel2:
+                man2_lif -=1
+                for led in vel_led:
+                    led.value(0)
+                for i in range(lif_led2):
+                    leds.man2[i].value(0)
+                    if not hjol:
+                        hjol = True
+                    break
+    
+
